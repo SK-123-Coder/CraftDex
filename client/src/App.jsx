@@ -1,6 +1,7 @@
 // Dependencies
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import React from 'react'
+import { AnimatePresence } from "framer-motion";
 
 // Configuration
 import ScrollToTop from './config/ScrollToTop'
@@ -22,45 +23,46 @@ import ImageToPdf from './pages/Tools_Pages/ImageToPdf'
 
 function App() {
   return (
-    <>
+    <div className="bg-gradient-to-b from-gray-900 to-gray-950">
     <BrowserRouter>
       {/* Handel scroll */}
       <ScrollToTop />
+       <AnimatePresence mode="wait">
+        <Routes>
+          {/* Home Page */}
+          <Route path="/" element={<Home className="fade-box"/>} />
 
-      <Routes>
-        {/* Home Page */}
-        <Route path="/" element={<Home className="fade-box"/>} />
+          {/* Home Page */}
+          <Route path="/tools" element={<Tools className="fade-box"/>} />
 
-        {/* Home Page */}
-        <Route path="/tools" element={<Tools className="fade-box"/>} />
+          {/* Home Page */}
+          <Route path="/docs" element={<Docs className="animate-fadeIn"/>} />
 
-        {/* Home Page */}
-        <Route path="/docs" element={<Docs className="animate-fadeIn"/>} />
+          {/* Docs Content PAge */}
+          <Route path="/docscontent/:category/:id" element={<DocsContent />} />
 
-        {/* Docs Content PAge */}
-        <Route path="/docscontent/:category/:id" element={<DocsContent />} />
+          {/* --------------------------------------- Auth Pages -------------------------------------------------- */}
 
-        {/* --------------------------------------- Auth Pages -------------------------------------------------- */}
+          {/* Signup Page */}
+          <Route path="/signup" element={<Signup />} />
 
-        {/* Signup Page */}
-        <Route path="/signup" element={<Signup />} />
+          {/* Login Page */}
+          <Route path="/login" element={<Login />} />
 
-        {/* Login Page */}
-        <Route path="/login" element={<Login />} />
+          {/* Account recovery page */}
+          <Route path="/accountRecover" element={<AccountRecover />} />
 
-        {/* Account recovery page */}
-        <Route path="/accountRecover" element={<AccountRecover />} />
+          {/* Admin Page */}
+          <Route path="/admin" element={<AdminPage />} />
 
-        {/* Admin Page */}
-        <Route path="/admin" element={<AdminPage />} />
+          {/* --------------------------------------- Tools Pages -------------------------------------------------- */}
 
-        {/* --------------------------------------- Tools Pages -------------------------------------------------- */}
-
-        {/* Image to PDF converter Page */}
-        <Route path="/imageToPdf" element={<ImageToPdf />} />
-      </Routes>
+          {/* Image to PDF converter Page */}
+          <Route path="/imageToPdf" element={<ImageToPdf />} />
+        </Routes>
+       </AnimatePresence>
     </BrowserRouter>
-    </>
+    </div>
   )
 }
 
