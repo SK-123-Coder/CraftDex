@@ -1,5 +1,6 @@
 // Dependencies
 import { Link } from "react-router-dom";
+import React from "react";
 
 // Components
 import Footer from "../components/Footer"
@@ -138,4 +139,4 @@ function Docs(){
     )
 }
 
-export default Docs
+export default React.memo(Docs);

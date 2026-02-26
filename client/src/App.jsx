@@ -1,5 +1,6 @@
 // Dependencies
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import React from 'react'
 
 // Configuration
 import ScrollToTop from './config/ScrollToTop'
@@ -28,13 +29,13 @@ function App() {
 
       <Routes>
         {/* Home Page */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home className="fade-box"/>} />
 
         {/* Home Page */}
-        <Route path="/tools" element={<Tools />} />
+        <Route path="/tools" element={<Tools className="fade-box"/>} />
 
         {/* Home Page */}
-        <Route path="/docs" element={<Docs />} />
+        <Route path="/docs" element={<Docs className="animate-fadeIn"/>} />
 
         {/* Docs Content PAge */}
         <Route path="/docscontent/:category/:id" element={<DocsContent />} />
@@ -63,4 +64,4 @@ function App() {
   )
 }
 
-export default App
+export default React.memo(App);

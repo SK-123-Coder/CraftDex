@@ -3,6 +3,7 @@ import { useState, useCallback } from "react"
 import { Link } from "react-router-dom"
 import { useRef } from "react"
 import imageCompression from "browser-image-compression"
+import React from "react"
 
 // Import of ui component
 import Popup from "../../components/PopUp"
@@ -295,4 +296,4 @@ const handleDownloadPdf = async () => {  // Handle PDF generation and download
   )
 }
 
-export default ImageToPdf;
+export default React.memo(ImageToPdf);

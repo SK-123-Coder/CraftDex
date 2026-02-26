@@ -1,5 +1,6 @@
 // Dependencies
 import { useState } from "react"
+import React from "react";
 
 // UI Components
 import Popup from "../components/PopUp.jsx"
@@ -251,4 +252,4 @@ function Footer(){
     )
 }
 
-export default Footer
+export default React.memo(Footer);

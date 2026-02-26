@@ -1,6 +1,7 @@
 // Imports of dependencies
 import { useEffect, useState } from "react";
 import socket from '../../config/socket'
+import React from "react";
 
 function AdminPage(){
 const API = import.meta.env.VITE_API_URL;
@@ -252,4 +253,4 @@ const handleSubmit = async (e) => {  // handle and sends data from input feild t
     )
 }
 
-export default AdminPage;
+export default React.memo(AdminPage);

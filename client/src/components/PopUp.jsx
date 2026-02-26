@@ -1,5 +1,6 @@
 // Import dependencies
 import { useNavigate } from "react-router-dom";
+import React from "react";
 
 const Popup = ({ isOpen, title, message, btn, state, onClose }) => {
   const navigate = useNavigate();
@@ -65,4 +66,4 @@ const Popup = ({ isOpen, title, message, btn, state, onClose }) => {
   );
 };
 
-export default Popup;
+export default React.memo(Popup);

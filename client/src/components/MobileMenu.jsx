@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
+import React from "react";
 
 
 function MobileMenu({
@@ -205,4 +206,4 @@ useEffect(() => {  // Fetch user data on component mount to determine if authent
   );
 }
 
-export default MobileMenu;
+export default React.memo(MobileMenu);

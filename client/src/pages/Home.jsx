@@ -2,70 +2,71 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import React from 'react';
 
 // Components
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
 function Home(){
-  const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL;
 
-  // For navigation based on apis respons from backend
-  const navigate = useNavigate();
-  const [ state, setState ] = useState('/signup');
+const navigate = useNavigate();  // It is used to programmatically navigate to different routes in the application.
 
-  // It redirect authorised user to tools page only 1 time use.
-  useEffect(() => {
-    const hasChecked = sessionStorage.getItem("auth_checked");
-    if (hasChecked) return;
+useEffect(() => {  // This useEffect hook is responsible for checking the user's authentication status when the Home component mounts. It uses sessionStorage to ensure that the authentication check is performed only once per session, preventing unnecessary API calls on subsequent renders. If the user is authenticated, it navigates them to the "/tools" page; otherwise, it leaves them on the home page where they can choose to sign up or learn more.
+  const hasChecked = sessionStorage.getItem("auth_checked");
 
-    sessionStorage.setItem("auth_checked", "true");
+  if (hasChecked) return;
 
-    const checkUser = async () => {
-      try {
-        const res = await fetch(`${API}/api/user/userVerify`, {
-          method: "GET",
-          credentials: "include",
-        });
+  sessionStorage.setItem("auth_checked", "true");
 
-        if (res.ok) {
-          const data = await res.json();
-          if (data) {
-            navigate("/tools", { replace: true });
-          }
+  const checkUser = async () => {
+    try {
+      const res = await fetch(`${API}/api/user/userVerify`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data) {
+          navigate("/tools", { replace: true });
         }
-      } catch (error) {
-        console.error("Auth check failed");
       }
-    };
-
-    checkUser();
-  }, [navigate]);
-
-  // It change state of get started button depending on user authorisation
-  useEffect(() => {
-
-    const checkButtonState = async () => {
-      try {
-        const res = await fetch(`${API}/api/user/userVerify`, {
-          method: "GET",
-          credentials: "include"
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data) {
-            setState('/tools');
-          }
-        }
-      } catch (error) {
-        console.error("Auth check failed");
-      }
+    } catch (error) {
+      console.error("Auth check failed");
     }
+  };
 
-    checkButtonState();
+  checkUser();
 
-  }, []);
+}, [navigate]);
+
+
+const [ state, setState ] = useState('/signup');  // It is used to manage the state of the "Get Started" button, which determines whether it should direct users to the signup page or the tools page based on their authentication status.
+
+useEffect(() => {  // This useEffect hook performs a similar authentication check as the previous one, but it directly updates the state that controls the "Get Started" button's destination. If the user is authenticated, it sets the state to "/tools", allowing the button to navigate to the tools page. If not authenticated, it keeps the state as "/signup", directing users to the signup page when they click the button. This ensures that the button's behavior is consistent with the user's authentication status.
+  const checkButtonState = async () => {
+    try {
+      const res = await fetch(`${API}/api/user/userVerify`, {
+        method: "GET",
+        credentials: "include"
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data) {
+          setState('/tools');
+        }
+      }
+    } catch (error) {
+      console.error("Auth check failed");
+    }
+  }
+
+  checkButtonState();
+
+}, []);
   
     return(
         <>
@@ -255,4 +256,4 @@ function Home(){
     )
 }
 
-export default Home
+export default React.memo(Home);

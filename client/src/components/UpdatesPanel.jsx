@@ -1,5 +1,6 @@
 // Dependencies
 import { useEffect, useState } from "react";
+import React from "react";
 
 const UpdatesPanel = ({ isOpen, onClose }) => {
 const API = import.meta.env.VITE_API_URL;
@@ -120,4 +121,4 @@ if (loading) {
   );
 };
 
-export default UpdatesPanel;
+export default React.memo(UpdatesPanel);

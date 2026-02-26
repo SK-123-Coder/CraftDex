@@ -1,6 +1,7 @@
 // Import of dependencies
 import { Link } from "react-router-dom"
 import {useState} from "react"
+import React from "react"
 
 // Import of ui components
 import Popup from "../../components/PopUp"
@@ -188,4 +189,4 @@ const handleSubmit = async (e) => {  // For form data
   );
 }
 
-export default Signup;
+export default React.memo(Signup);

@@ -1,6 +1,7 @@
 // Import of dependencies
 import { Link } from "react-router-dom"
 import {useState} from "react"
+import React from "react"
 
 // Import of ui components
 import Popup from "../../components/PopUp"
@@ -152,4 +153,4 @@ const handleSubmit = async (e) => {  // Handle submit form data to backend
     )
 }
 
-export default AccountRecover;
+export default React.memo(AccountRecover);

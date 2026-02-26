@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import React from "react";
 
 function ToolsCard({ title, description, image, state, image_alt, link }) {
   const isComingSoon = link === "#";
@@ -40,4 +41,4 @@ function ToolsCard({ title, description, image, state, image_alt, link }) {
   );
 }
 
-export default ToolsCard;
+export default React.memo(ToolsCard);

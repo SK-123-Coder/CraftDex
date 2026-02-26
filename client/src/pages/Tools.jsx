@@ -1,3 +1,6 @@
+// dependency
+import React from 'react'
+
 // Components
 import Navbar from '../components/Navbar'
 import Footer from "../components/Footer"
@@ -93,4 +96,4 @@ function Tools(){
     )
 }
 
-export default Tools
+export default React.memo(Tools);

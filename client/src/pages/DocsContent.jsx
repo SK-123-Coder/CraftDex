@@ -1,6 +1,7 @@
 // Imports of dependencies
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import React from "react";
 
 // Import of ui components
 import Footer from "../components/Footer"
@@ -160,4 +161,4 @@ function DocsContent() {
 }
 
 
-export default DocsContent;
+export default React.memo(DocsContent);
