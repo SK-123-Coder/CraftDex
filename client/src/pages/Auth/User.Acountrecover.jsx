@@ -9,65 +9,63 @@ import Popup from "../../components/PopUp"
 import AccountRecoverPopup from "../../data/Popup/AccountReconvery_Popup/user.AccountRecoverPopup"
 
 function AccountRecover(){
-  const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL;
   
-  const [open, setOpen] = useState(false); // For popup window
-  const [activePopup, setActivePopup] = useState(null); // Activation of popup window
+const [open, setOpen] = useState(false); // For popup window
+const [activePopup, setActivePopup] = useState(null); // Activation of popup window
 
-  // Handle form data
-  const [formData, setFormData] = useState({
-    name:"",
-    email:""
+const [formData, setFormData] = useState({  // Form data for account recovery
+  name:"",
+  email:""
+});
+
+const handleChange = (e) => {  // Handle change of form data
+  setFormData({
+    ...formData,
+    [e.target.name]: e.target.value,
   });
+};
 
-  // Handle multiple input feilds
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+const handleSubmit = async (e) => {  // Handle submit form data to backend
+  e.preventDefault();
+
+  try{
+    const response = await fetch(`${API}/api/auth/accountRecover`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData),
     });
-  };
 
-  // Handle form and send data to backend
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    if(response.status === 200){  // If data exist and successfully sent email
+      // When successfull
 
-    try{
-      const response = await fetch(`${API}/api/auth/accountRecover`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData),
-      });
+      const popup = AccountRecoverPopup.find(p => p.id === 1);
+      setActivePopup(popup);
+      setOpen(true);
 
-      if(response.status === 200){
-        // When successfull
+    } else if(response.status === 400){  // If empty feild
+      // When empty feild
 
-        const popup = AccountRecoverPopup.find(p => p.id === 1);
-        setActivePopup(popup);
-        setOpen(true);
+      const popup = AccountRecoverPopup.find(p => p.id === 2);
+      setActivePopup(popup);
+      setOpen(true);
 
-      } else if(response.status === 400){
-        // When empty feild
+    } else if(response.status === 404){  // If data not exist
+      // If data not exist
 
-        const popup = AccountRecoverPopup.find(p => p.id === 2);
-        setActivePopup(popup);
-        setOpen(true);
-
-      } else if(response.status === 404){
-        // If data not exist
-
-        const popup = AccountRecoverPopup.find(p => p.id === 3);
-        setActivePopup(popup);
-        setOpen(true);
+      const popup = AccountRecoverPopup.find(p => p.id === 3);
+      setActivePopup(popup);
+      setOpen(true);
         
-      }
-      
-    } catch(error){
-      console.error(error);
     }
+      
+  } catch(error){
+    console.error(error);
   }
+}
+
     return(
         <>
         <div className="bg-gradient-to-b from-gray-900 to-gray-800 min-h-screen flex items-center justify-center font-sans px-3 md:px-10">

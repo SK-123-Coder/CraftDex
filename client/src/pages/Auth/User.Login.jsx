@@ -9,72 +9,70 @@ import Popup from "../../components/PopUp"
 import loginPopup from "../../data/Popup/Login_Popup/user.LoginPopup"
 
 function Login(){
-  const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL;
   
-  const [open, setOpen] = useState(false);  // For popup window
-  const [activePopup, setActivePopup] = useState(null);  // For activation of popup window
+const [open, setOpen] = useState(false);  // For popup window
+const [activePopup, setActivePopup] = useState(null);  // For activation of popup window
 
-  // Handle data of form
-  const [formData, setFormData] = useState({
-    email:"",
-    password:""
+const [formData, setFormData] = useState({  // For form data
+  email:"",
+  password:""
+});
+
+const handleChange = (e) => {  // Handle form data change
+  setFormData({
+    ...formData,
+    [e.target.name]: e.target.value,
   });
+};
 
-  // Handle multiple input feilds
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+const handleSubmit = async (e) => {  // Handle form submission
+  e.preventDefault();
+
+  try{
+    const response = await fetch(`${API}/api/auth/login`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData),
     });
-  };
-  
-  // Handle form and send o backend
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    try{
-      const response = await fetch(`${API}/api/auth/login`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData),
-      });
+    if (response.status === 200) {  // If login successful
+      // When successful
 
-      if (response.status === 200) {
-        // When successful
+      const popup = loginPopup.find(p => p.id === 1);
+      setActivePopup(popup);
+      setOpen(true);
 
-        const popup = loginPopup.find(p => p.id === 1);
-        setActivePopup(popup);
-        setOpen(true);
+    } else if (response.status === 400){  // If data empty
+      // When empty feild
 
-      } else if (response.status === 400){
-        // When empty feild
+      const popup = loginPopup.find(p => p.id === 3);
+      setActivePopup(popup);
+      setOpen(true);
 
-        const popup = loginPopup.find(p => p.id === 3);
-        setActivePopup(popup);
-        setOpen(true);
+    } else if (response.status === 404){  // If user not found
+      // If data not found
 
-      } else if (response.status === 404){
-        // If data not found
+      const popup = loginPopup.find(p => p.id === 2);
+      setActivePopup(popup);
+      setOpen(true);
 
-        const popup = loginPopup.find(p => p.id === 2);
-        setActivePopup(popup);
-        setOpen(true);
+    } else if (response.status === 401){  // If password incorrect
+      // If data incorrect
 
-      } else if (response.status === 401){
-        // If data incorrect
-
-        const popup = loginPopup.find(p => p.id === 4);
-        setActivePopup(popup);
-        setOpen(true);
-      }
-
-    } catch(error){
-      console.error(error);
+      const popup = loginPopup.find(p => p.id === 4);
+      setActivePopup(popup);
+      setOpen(true);
     }
+
+  } catch(error){
+    console.error(error);
   }
+}
+
     return(
         <>
         <div className="bg-gradient-to-b from-gray-900 to-gray-800 min-h-screen flex items-center justify-center font-sans px-3 md:px-10">

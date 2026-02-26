@@ -11,97 +11,92 @@ import Popup from "../../components/PopUp"
 import ImageToPdf_Data from "../../data/Popup/Tools_Pages_Popup/ImageToPdf"
 
 function ImageToPdf(){
-  const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL;
   
-  const [open, setOpen] = useState(false); // For Popup window
-  const [showUploader, setShowUploader] = useState(true); // For Upload and Grid Section
-  const [images, setImages] = useState([]);  // For Image rendering on grid section
+const [open, setOpen] = useState(false); // For popup when user tries to upload more than 25 images
+const [showUploader, setShowUploader] = useState(true); // To toggle between uploader and grid view
+const [images, setImages] = useState([]);  // To store selected images and their preview URLs
 
-  const [isDownloading, setIsDownloading] = useState(false);  // For download button animation during downloadin
+const [isDownloading, setIsDownloading] = useState(false);  // To manage download state and prevent multiple clicks
 
+const fileInputRef = useRef(null);  // For triggering hidden file input
 
+const MAX_IMAGES = 25;  // Max image input
 
-  const fileInputRef = useRef(null);
+const handleImageChange = (e) => {  // Handle image selection and validation
+  const files = Array.from(e.target.files);  // Convert FileList to Array
 
-
-
-  const MAX_IMAGES = 25;  // Max image input
-
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-
-    if (images.length + files.length > MAX_IMAGES) {
-      setOpen(true);
-      e.target.value = "";
-      return;
-    }
-
-    const optimizedFiles = files.map(file => ({
-      file,
-      preview: URL.createObjectURL(file),
-    }));
-
-    setImages(prev => [...prev, ...optimizedFiles]);
-    setShowUploader(false);
+  if (images.length + files.length > MAX_IMAGES) {  // Validate max image count
+    setOpen(true);
     e.target.value = "";
-  };
+    return;
+  }
 
-  const removeImage = (removeIndex) => {
-    setImages(prev => {
-      URL.revokeObjectURL(prev[removeIndex].preview);
-      return prev.filter((_, i) => i !== removeIndex);
-    });
-  };
+  const optimizedFiles = files.map(file => ({  // Create preview URLs for selected images
+    file,
+    preview: URL.createObjectURL(file),
+  }));
 
-  const compressImage = async (file) => {
-    return await imageCompression(file, {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 2000,
-      useWebWorker: true,
-    });
-  };
+  setImages(prev => [...prev, ...optimizedFiles]);
+  setShowUploader(false);
+  e.target.value = "";
+};
 
-  const handleReselect = useCallback(() => {
-    images.forEach(img => URL.revokeObjectURL(img.preview));
-    setImages([]);
-    setShowUploader(true);
-  }, [images]);
+const removeImage = (removeIndex) => {  // Remove image and revoke its preview URL to free memory
+  setImages(prev => {
+    URL.revokeObjectURL(prev[removeIndex].preview);
+    return prev.filter((_, i) => i !== removeIndex);
+  });
+};
 
-  const handleDownloadPdf = async () => {
-    if (!images.length || isDownloading) return;
-    setIsDownloading(true);
+const compressImage = async (file) => {  // Compress image before uploading to reduce file size and speed up PDF generation
+  return await imageCompression(file, {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 2000,
+    useWebWorker: true,
+  });
+};
 
-    try {
-      const formData = new FormData();
+const handleReselect = useCallback(() => {  // Clear all selected images and show uploader again
+  images.forEach(img => URL.revokeObjectURL(img.preview));
+  setImages([]);
+  setShowUploader(true);
+}, [images]);
 
-      for (const img of images) {
-        const compressed = await compressImage(img.file);
-        formData.append("images", compressed);
-      }
+const handleDownloadPdf = async () => {  // Handle PDF generation and download
+  if (!images.length || isDownloading) return;
+  setIsDownloading(true);
 
-      const res = await fetch(`${API}/api/downloadPdf`, {
-        method: "POST",
-        body: formData,
-      });
+  try {
+    const formData = new FormData();
 
-      if (!res.ok) throw new Error("PDF generation failed");
-
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "images.pdf";
-      a.click();
-
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsDownloading(false);
+    for (const img of images) {
+      const compressed = await compressImage(img.file);
+      formData.append("images", compressed);
     }
-  };
 
+    const res = await fetch(`${API}/api/downloadPdf`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) throw new Error("PDF generation failed");
+
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "images.pdf";
+    a.click();
+
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setIsDownloading(false);
+  }
+};
 
   return(
     <>

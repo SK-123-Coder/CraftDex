@@ -9,69 +9,66 @@ import Popup from "../../components/PopUp"
 import signupPopup from '../../data/Popup/Signup_Popup/user.SignupPopup'
 
 function Signup() {
-  const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL;
   
-  const [open, setOpen] = useState(false); // For Popup window
-  const [activePopup, setActivePopup] = useState(null); // Activation of popup windows
+const [open, setOpen] = useState(false); // For Popup window
+const [activePopup, setActivePopup] = useState(null); // Activation of popup windows
 
-  const inputStyle = "w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 placeholder-gray-500 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 outline-none transition";
+const inputStyle = "w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 placeholder-gray-500 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 outline-none transition";
 
-  // Store form data
-  const [formData, setFormData] = useState({
-    name:"",
-    email:"",
-    password:""
+const [formData, setFormData] = useState({  // For form data
+  name:"",
+  email:"",
+  password:""
+});
+
+const handleChange = (e) => {  // For form data
+  setFormData({
+    ...formData,
+    [e.target.name]: e.target.value,
   });
+};
 
-  // Handle multiple input fields
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+const handleSubmit = async (e) => {  // For form data
+  e.preventDefault();
+
+  try {
+    const response = await fetch(`${API}/api/auth/signup`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData),
     });
-  };
 
-  // Send data to backend
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (response.status === 201) {  // If user created successfully
+      // When successfull
 
-    try {
-      const response = await fetch(`${API}/api/auth/signup`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData),
-      });
+      const popup = signupPopup.find(p => p.id === 1);
+      setActivePopup(popup);
+      setOpen(true);
 
-      if (response.status === 201) {
-        // When successfull
+    } else if (response.status === 409) {  // When user already exist
+      // If already exist
 
-        const popup = signupPopup.find(p => p.id === 1);
-        setActivePopup(popup);
-        setOpen(true);
+      const popup = signupPopup.find(p => p.id === 2);
+      setActivePopup(popup);
+      setOpen(true);
 
-      } else if (response.status === 409) {
-        // If already exist
+    } else if (response.status === 400){  // When user send empty feild
+      // When empty feild
 
-        const popup = signupPopup.find(p => p.id === 2);
-        setActivePopup(popup);
-        setOpen(true);
+      const popup = signupPopup.find(p => p.id === 3);
+      setActivePopup(popup);
+      setOpen(true);
 
-      } else if (response.status === 400){
-        // When empty feild
-
-        const popup = signupPopup.find(p => p.id === 3);
-        setActivePopup(popup);
-        setOpen(true);
-
-      }
-
-    } catch (error) {
-      console.error(error);
     }
+
+  } catch (error) {
+    console.error(error);
   }
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-gray-800 font-sans px-4">

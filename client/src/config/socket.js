@@ -22,32 +22,32 @@ export const socket = io(SOCKET_URL, {
 
 // // 🔥 DEBUG LOGS
 // socket.on("connect", () => {
-//   console.log("✅ Socket Connected");
+//   console.log("Socket Connected");
 //   console.log("Socket ID:", socket.id);
 //   console.log("Connected to:", socket.io.uri);
 // });
 
 // socket.on("connect_error", (err) => {
-//   console.log("❌ Connection Error");
+//   console.log("Connection Error");
 //   console.log("Message:", err.message);
 //   console.log("Description:", err.description);
 //   console.log("Type:", err.type);
 // });
 
 // socket.on("disconnect", (reason) => {
-//   console.log("⚠️ Disconnected:", reason);
+//   console.log("Disconnected:", reason);
 // });
 
 // socket.on("reconnect_attempt", () => {
-//   console.log("🔄 Trying to reconnect...");
+//   console.log("Trying to reconnect...");
 // });
 
 // socket.on("reconnect", (attempt) => {
-//   console.log("✅ Reconnected after", attempt, "attempts");
+//   console.log("Reconnected after", attempt, "attempts");
 // });
 
 // socket.on("reconnect_failed", () => {
-//   console.log("❌ Reconnection failed");
+//   console.log("Reconnection failed");
 // });
 
 

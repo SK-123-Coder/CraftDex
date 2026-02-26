@@ -3,29 +3,29 @@ import { useEffect, useState } from "react";
 import socket from '../../config/socket'
 
 function AdminPage(){
-    const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL;
 
-    // For live analysis of user
-    const [users, setUsers] = useState(0); // Live count
-    const [dailyUsers, setDailyUsers] = useState(0);  // daily count
+// For user analytics fetching live user count and daily active users count from backend using socket.io
+const [users, setUsers] = useState(0); // Live count
+const [dailyUsers, setDailyUsers] = useState(0);  // daily count
 
-    useEffect(() => {
-        socket.on("userCount", setUsers);
-        socket.on("dailyActiveUsers", setDailyUsers);
+useEffect(() => {
+    socket.on("userCount", setUsers);
+    socket.on("dailyActiveUsers", setDailyUsers);
 
-        return () => {
+    return () => {
         socket.off("userCount");
         socket.off("dailyActiveUsers");
-        };
-    }, []);
+    };
+}, []);
 
 
 
-    // For system statics
-    const [systemInfo, setSystemInfo] = useState(null);  // Set live state of server
-    const [loading, setLoading] = useState(true);  // If state not received
+// For system statics
+const [systemInfo, setSystemInfo] = useState(null);  // Set live state of server
+const [loading, setLoading] = useState(true);  // If state not received
 
-    useEffect(() => {
+useEffect(() => {  // Fetch system info from backend
     const fetchSystemInfo = async () => {
         try {
         const response = await fetch(`${API}/api/auth/systemInfo`);
@@ -45,24 +45,24 @@ function AdminPage(){
     const interval = setInterval(fetchSystemInfo, 5000);
     return () => clearInterval(interval);
 
-    }, []);
+}, []);
 
 
 
-    // Handle notification input feilds
-    const [title, setTitle] = useState("");  // For title feild
-    const [paragraph, setParagraph] = useState("");  // For paragraph feild
-    const [load, setLoad] = useState(false);
+// Handle notification input feilds
+const [title, setTitle] = useState("");  // For title feild
+const [paragraph, setParagraph] = useState("");  // For paragraph feild
+const [load, setLoad] = useState(false);
 
-    const handleSubmit = async (e) => {  // handle and sends data from input feild to backend
-        e.preventDefault();
+const handleSubmit = async (e) => {  // handle and sends data from input feild to backend
+    e.preventDefault();
 
-        if (!title.trim() || !paragraph.trim()) {
+    if (!title.trim() || !paragraph.trim()) {
         alert("Title and message are required");
         return;
-        }
+    }
 
-        try {
+    try {
         setLoad(true);
 
         const res = await fetch(`${API}/api/auth/NotificationStore`, {
@@ -76,13 +76,13 @@ function AdminPage(){
             }),
         });
 
-        // ✅ First check if response is OK
+        // First check if response is OK
         if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.message || "Failed to send notification");
+            const errorData = await res.json().catch(() => ({}));
+            throw new Error(errorData.message || "Failed to send notification");
         }
 
-        // ✅ Only parse JSON if response has body
+        // Only parse JSON if response has body
         let data = null;
         const contentType = res.headers.get("content-type");
 
@@ -94,17 +94,15 @@ function AdminPage(){
         setTitle("");
         setParagraph("");
 
-        } catch (err) {
+    } catch (err) {
+        console.error(err);
+        alert(err.message);
 
-            console.error(err);
-            alert(err.message);
+    } finally {
+        setLoad(false);
+    }
+};
 
-        } finally {
-
-            setLoad(false);
-
-        }
-    };
     return(
         <>
         {/* Page Wrapper */}
