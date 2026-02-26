@@ -1,7 +1,6 @@
 // Dependencies
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import React from 'react'
-import { AnimatePresence } from "framer-motion";
 
 // Configuration
 import ScrollToTop from './config/ScrollToTop'
@@ -23,11 +22,10 @@ import ImageToPdf from './pages/Tools_Pages/ImageToPdf'
 
 function App() {
   return (
-    <div className="bg-gradient-to-b from-gray-900 to-gray-950">
+    <div>
     <BrowserRouter>
       {/* Handel scroll */}
       <ScrollToTop />
-       <AnimatePresence mode="wait">
         <Routes>
           {/* Home Page */}
           <Route path="/" element={<Home className="fade-box"/>} />
@@ -60,7 +58,6 @@ function App() {
           {/* Image to PDF converter Page */}
           <Route path="/imageToPdf" element={<ImageToPdf />} />
         </Routes>
-       </AnimatePresence>
     </BrowserRouter>
     </div>
   )
