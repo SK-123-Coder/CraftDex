@@ -114,32 +114,6 @@ useEffect(() => {  // Check if user is logged in on mount
 }, []);
 
 
-
-const [ state, setState ] = useState('/signup');  // Default to signup for unauthenticated users
-useEffect(() => {  // Check if user is logged in to set Tools button state
-  const checkButtonState = async () => {
-    try {
-      const res = await fetch(`${API}/api/user/userVerify`, {
-        method: "GET",
-        credentials: "include"
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        if (data) {
-          setState('/tools');
-        }
-      }
-    } catch (error) {
-      console.error("Auth check failed");
-    }
-  }
-
-  checkButtonState();
-
-}, []);
-
-
 const handleDoubleClick = async () => {  // Admin auth on logo double-click
   const pass = prompt("Enter:");
 
@@ -283,7 +257,7 @@ return (
                 </NavLink>
 
                 <NavLink
-                    to={state}
+                    to={'/tools'}
                     className={({ isActive }) =>
                     `${navBase} ${isActive ? navActive : navInactive}`
                     }
