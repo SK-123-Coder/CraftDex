@@ -4,31 +4,50 @@ import { useState } from "react"
 // UI Components
 import Popup from "../components/PopUp.jsx"
 
-// // Import of data for popup window
-import FooterLinks from '../data/Popup/Footer/FooterLink.js'
-
 function Footer(){
     const API = import.meta.env.VITE_API_URL;
-    
+
     // For social meadia link
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);  // Popup state
+
+    const [ popupData, setPopupData ] = useState({  // Popup content state
+        title: "",
+        message: "",
+        btn: "",
+        state: ""
+    })
+
+    const socialLinks = () => {  // Placeholder function for social media links
+        setOpen(true);
+        setPopupData({
+            title: "Inactive Link",
+            message: "Sorry, this link is currently inactive. Please check back later or contact us for more information.",
+            btn: "OK",
+            state: "#"
+        })
+    }
+    
+
 
     // Form
-    const [email, setEmail] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
-    const [emailRes, setEmailRes] = useState(false)
+    const [email, setEmail] = useState("");  // Email input state
+    const [loading, setLoading] = useState(false);  // Loading state for form submission
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!email.trim()) {
-        setMessage("Please enter an email address");
+        if (!email.trim()) {  // Basic validation for empty input
+            setOpen(true);
+            setPopupData({
+                title: "Please enter a valid email",
+                message: "The email address you entered is not valid. Please check and try again.",
+                btn: "OK",
+                state: "#"
+            })
         return;
         }
 
         setLoading(true);
-        setMessage("");
 
         try {
         const res = await fetch(`${API}/api/user/footerEmail`, {
@@ -42,16 +61,42 @@ function Footer(){
         const data = await res.json();
 
         if (data.success) {
-            setMessage("Thanks for subscribing 🎉");
+
+            setOpen(true);
+            setPopupData({
+                title: "Successfully Subscribed",
+                message: "Thank you for subscribing to our newsletter!",
+                btn: "OK",
+                state: "#"
+            })
+
             setEmail("");
-            setEmailRes(true);
+
         } else {
-            setMessage(data.message || "Something went wrong");
+
+            setOpen(true);
+            setPopupData({
+                title: "Already Subscribed",
+                message: "You are already subscribed to our newsletter!",
+                btn: "OK",
+                state: "#"
+            })
+
         }
         } catch (error) {
-        setMessage("Server error. Please try again later.");
+
+            setOpen(true);
+            setPopupData({
+                title: "Server Error",
+                message: "Server error. Please try again later.",
+                btn: "OK",
+                state: "#"
+            })
+
         } finally {
-        setLoading(false);
+
+            setLoading(false);
+
         }
     };
 
@@ -151,35 +196,35 @@ function Footer(){
                     <h3 className="text-lg font-semibold text-white mb-4">Follow Us</h3>
                     <div className="flex justify-center gap-6 text-gray-400">
                     <button
-                        onClick={() => setOpen(true)}
+                        onClick={() => socialLinks()}
                         className="hover:text-blue-400 transform hover:scale-110 transition"
                     >
                         <i className="fa-brands fa-twitter text-2xl"></i>
                     </button>
 
                     <button
-                        onClick={() => setOpen(true)}
+                        onClick={() => socialLinks()}
                         className="hover:text-blue-400 transform hover:scale-110 transition"
                     >
                         <i className="fa-brands fa-github text-2xl"></i>
                     </button>
 
                     <button
-                        onClick={() => setOpen(true)}
+                        onClick={() => socialLinks()}
                         className="hover:text-blue-400 transform hover:scale-110 transition"
                     >
                         <i className="fa-brands fa-linkedin text-2xl"></i>
                     </button>
 
                     <button
-                        onClick={() => setOpen(true)}
+                        onClick={() => socialLinks()}
                         className="hover:text-blue-400 transform hover:scale-110 transition"
                     >
                         <i className="fa-solid fa-envelope text-2xl"></i>
                     </button>
 
                     <button
-                        onClick={() => setOpen(true)}
+                        onClick={() => socialLinks()}
                         className="hover:text-blue-400 transform hover:scale-110 transition"
                     >
                         <i className="fa-brands fa-youtube text-2xl"></i>
@@ -195,24 +240,12 @@ function Footer(){
 
             <Popup
             isOpen={open}
-            title={FooterLinks[0].title}
-            message={FooterLinks[0].message}
-            btn={FooterLinks[0].btn}
-            state={FooterLinks[0].state}
+            title={popupData.title}
+            message={popupData.message}
+            btn={popupData.btn}
+            state={popupData.state}
             onClose={() => setOpen(false)}
             />
-
-            {/* Feedback message */}
-            {message && (
-                <Popup
-                    isOpen={emailRes}
-                    title={FooterLinks[1].title}
-                    message={FooterLinks[1].message}
-                    btn={FooterLinks[1].btn}
-                    state={FooterLinks[1].state}
-                    onClose={() => setEmailRes(false)}
-                />
-            )}
         </footer>
         </>
     )
