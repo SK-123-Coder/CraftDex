@@ -12,72 +12,76 @@ function MobileMenu({
   setError,
 }) {
 
-  const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL;
 
-  const linkBase =
-    "flex items-center gap-3 px-6 py-3 border-b border-gray-800 transition-all duration-300 ease-out";
+const linkBase = "flex items-center gap-3 px-6 py-3 border-b border-gray-800 transition-all duration-300 ease-out";
 
-  const linkInactive =
-    "text-gray-300 hover:bg-gray-800/70 hover:text-[#5FBFF9] hover:pl-8";
+const linkInactive = "text-gray-300 hover:bg-gray-800/70 hover:text-[#5FBFF9] hover:pl-8";
 
-  const linkActive =
-    "bg-gray-800 text-[#5FBFF9] pl-8 font-semibold shadow-inner";
+const linkActive = "bg-gray-800 text-[#5FBFF9] pl-8 font-semibold shadow-inner";
 
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
 
-  // New user direction
-  const [ state, setState ] = useState('/signup');
 
-  // It change state of get started button depending on user authorisation
-  useEffect(() => {
+const [user, setUser] = useState(null);  // Track user state
+const [loading, setLoading] = useState(true);  // Track loading state for auth check
+const [ state, setState ] = useState('/signup');  // Default to signup, will update to /tools if user is authenticated
 
-    const checkButtonState = async () => {
-      try {
-        const res = await fetch(`${API}/api/user/userVerify`, {
-          method: "GET",
-          credentials: "include"
-        });
+// ================================================== APIs =========================================================
 
-        if (res.ok) {
-          const data = await res.json();
-          if (data) {
-            setState('/tools');
-          }
-        }
-      } catch (error) {
-        console.error("Auth check failed");
-      }
-    }
+useEffect(() => {  // Check if user is authenticated to determine if "Tools" link should be shown
+  const checkButtonState = async () => {
+    try {
+      const res = await fetch(`${API}/api/user/userVerify`, {
+        method: "GET",
+        credentials: "include"
+      });
 
-    checkButtonState();
-
-  }, []);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch(`${API}/api/auth/user`, {
-          method: "GET",
-          credentials: "include",
-        });
-
-        if (!res.ok) {
-          setUser(null);
-          return;
-        }
-
+      if (res.ok) {
         const data = await res.json();
-        setUser(data);
-      } catch {
-        setUser(null);
-      } finally {
-        setLoading(false);
+        if (data) {
+          setState('/tools');
+        }
       }
-    };
+    } catch (error) {
+      console.error("Auth check failed");
+    }
+  }
 
-    fetchUser();
-  }, []);
+  checkButtonState();
+
+}, []);
+
+useEffect(() => {  // Fetch user data on component mount to determine if authenticated
+  const fetchUser = async () => {
+    try {
+      const res = await fetch(`${API}/api/auth/user`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        setUser(null);
+        return;
+      }
+
+      const data = await res.json();
+      setUser(data);
+
+    } catch {
+
+      setUser(null);
+
+    } finally {
+
+      setLoading(false);
+      
+    }
+  };
+
+  fetchUser();
+}, []);
+
+// ================================================== APIs end =========================================================
 
   // SAFE early returns
   if (!Menu || loading) return null;
