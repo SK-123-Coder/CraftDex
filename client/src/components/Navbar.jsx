@@ -1,6 +1,7 @@
 // Dependencies
 import { Link } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import React from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -16,26 +17,45 @@ const navBase = "relative group transition duration-300";
 const navInactive = "text-gray-300 hover:text-[#5FBFF9]";
 const navActive = "text-[#5FBFF9] font-semibold";
 
-// React Router
-const navigate = useNavigate();
 
-// Search bar config
-const [searchText, setSearchText] = useState("");
-const [wait, setWait] = useState(false);
-const [error, setError] = useState("");
+const navigate = useNavigate();  // For programmatic navigation on search results
+
+const getInitials = (name) =>  // Convert a name like "John Doe" to "JD"
+  name
+    ?.split(" ")
+    .map(word => word[0])
+    .join("")
+    .toUpperCase();
+
+// ===================================================== UI states ======================================================
 
 // UI States
-const [open, setOpen] = useState(false);     // Notification panel
-const [Menu, setMenu] = useState(false);     // Mobile menu
+const [open, setOpen] = useState(false);  // Updates panel
+const [Menu, setMenu] = useState(false);  // Mobile menu
+useEffect(() => {  // Close menus on scroll or swipe
+  const closeOnScroll = () => setMenu(false);
+  const closeOnScrollProfile = () => setProfile(false);
 
-// Profile
-const [profile, setProfile] = useState(false);
-const profileRef = useRef(null);
-const [isDesktop, setIsDesktop] = useState(false);
+  window.addEventListener("scroll", closeOnScroll);
+  window.addEventListener("touchmove", closeOnScroll);
 
-useEffect(() => {
+
+  window.addEventListener("scroll", closeOnScrollProfile);
+  window.addEventListener("touchmove", closeOnScrollProfile);
+
+  return () => {
+    window.removeEventListener("scroll", closeOnScroll);
+    window.removeEventListener("touchmove", closeOnScroll);
+
+    window.removeEventListener("scroll", closeOnScrollProfile);
+    window.removeEventListener("touchmove", closeOnScrollProfile);
+  };
+}, []);
+
+const [isDesktop, setIsDesktop] = useState(false);  // Track if we're on desktop for profile hover behavior
+useEffect(() => {  // Check initial screen size and listen for resizes
   const handleResize = () => {
-    setIsDesktop(window.innerWidth >= 1024); // Tailwind lg breakpoint
+    setIsDesktop(window.innerWidth >= 1024);
   };
 
   handleResize(); // run on mount
@@ -44,29 +64,113 @@ useEffect(() => {
   return () => window.removeEventListener("resize", handleResize);
 }, []);
 
-// User Auth
-const [user, setUser] = useState(null);
-const [loading, setLoading] = useState(true);
+// Profile
+const [profile, setProfile] = useState(false);  // Profile dropdown visibility on hover/click
 
-// New user direction
-const [ state, setState ] = useState('/signup');
+// ===================================================== UI states ends ===================================================
 
 
-// Utility Functions
-const getInitials = (name) =>
-  name
-    ?.split(" ")
-    .map(word => word[0])
-    .join("")
-    .toUpperCase();
+// ===================================================== APIs ======================================================
+
+const [user, setUser] = useState(null);  // null = unknown, object = logged in, false = explicitly not logged in
+const [loading, setLoading] = useState(true);  // Loading state to prevent UI flash on auth check
+useEffect(() => {  // Check if user is logged in on mount
+  let isMounted = true;
+
+  const fetchUser = async () => {
+    try {
+      const res = await fetch(`${API}/api/auth/user`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      // User not logged in (expected case)
+      if (res.status === 401) {
+        if (isMounted) setUser(null);
+        return;
+      }
+
+      // Other errors (real problems)
+      if (!res.ok) {
+        throw new Error(`Auth error: ${res.status}`);
+      }
+
+      const data = await res.json();
+      if (isMounted) setUser(data);
+
+    } catch (err) {
+      console.error("Auth fetch failed:", err);
+      if (isMounted) setUser(null);
+      } finally {
+       if (isMounted) setLoading(false);
+      }
+  };
+
+  fetchUser();
+
+  return () => {
+    isMounted = false;
+  };
+}, []);
 
 
 
+const [ state, setState ] = useState('/signup');  // Default to signup for unauthenticated users
+useEffect(() => {  // Check if user is logged in to set Tools button state
+  const checkButtonState = async () => {
+    try {
+      const res = await fetch(`${API}/api/user/userVerify`, {
+        method: "GET",
+        credentials: "include"
+      });
 
-// Handlers
+      if (res.ok) {
+        const data = await res.json();
+        if (data) {
+          setState('/tools');
+        }
+      }
+    } catch (error) {
+      console.error("Auth check failed");
+    }
+  }
 
-// Search handler
-const handleSearch = async () => {
+  checkButtonState();
+
+}, []);
+
+
+const handleDoubleClick = async () => {  // Admin auth on logo double-click
+  const pass = prompt("Enter:");
+
+  if (!pass) return;
+
+  try {
+    const response = await fetch(`${API}/api/auth/adminAuth`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ pass }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      window.location.href = data.redirectUrl;
+    } else {
+      alert("Wrong password");
+    }
+  } catch (error) {
+    console.error("Auth error:", error);
+  }
+};
+
+
+const [searchText, setSearchText] = useState("");  // Controlled input for search bar
+const [wait, setWait] = useState(false);  // Prevent multiple rapid searches
+const [error, setError] = useState("");  // Error message for search feedback
+const handleSearch = async () => {  // Search API call
   if (!searchText.trim() || wait) return;
 
   setError("");
@@ -95,128 +199,11 @@ const handleSearch = async () => {
   }
 };
 
-// Admin authentication (double click)
-const handleDoubleClick = async () => {
-  const pass = prompt("Enter:");
-
-  if (!pass) return;
-
-  try {
-    const response = await fetch(`${API}/api/auth/adminAuth`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ pass }),
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      window.location.href = data.redirectUrl;
-    } else {
-      alert("Wrong password");
-    }
-  } catch (error) {
-    console.error("Auth error:", error);
-  }
-};
-
-// =====================
-// Effects
-// =====================
-
-    // Close mobile menu on scroll / touch
-    useEffect(() => {
-    const closeOnScroll = () => setMenu(false);
-    const closeOnScrollProfile = () => setProfile(false);
-
-    window.addEventListener("scroll", closeOnScroll);
-    window.addEventListener("touchmove", closeOnScroll);
-
-
-    window.addEventListener("scroll", closeOnScrollProfile);
-    window.addEventListener("touchmove", closeOnScrollProfile);
-
-    return () => {
-        window.removeEventListener("scroll", closeOnScroll);
-        window.removeEventListener("touchmove", closeOnScroll);
-
-        window.removeEventListener("scroll", closeOnScrollProfile);
-        window.removeEventListener("touchmove", closeOnScrollProfile);
-    };
-    }, []);
-
-    // Fetch logged-in user
-    useEffect(() => {
-    let isMounted = true;
-
-    const fetchUser = async () => {
-        try {
-        const res = await fetch(`${API}/api/auth/user`, {
-            method: "GET",
-            credentials: "include",
-        });
-
-        // User not logged in (expected case)
-        if (res.status === 401) {
-            if (isMounted) setUser(null);
-            return;
-        }
-
-        // Other errors (real problems)
-        if (!res.ok) {
-            throw new Error(`Auth error: ${res.status}`);
-        }
-
-        const data = await res.json();
-        if (isMounted) setUser(data);
-
-        } catch (err) {
-        console.error("Auth fetch failed:", err);
-        if (isMounted) setUser(null);
-        } finally {
-        if (isMounted) setLoading(false);
-        }
-    };
-
-    fetchUser();
-
-    return () => {
-        isMounted = false;
-    };
-    }, []);
-
-
-  // It change state of get started button depending on user authorisation
-  useEffect(() => {
-
-    const checkButtonState = async () => {
-      try {
-        const res = await fetch(`${API}/api/user/userVerify`, {
-          method: "GET",
-          credentials: "include"
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data) {
-            setState('/tools');
-          }
-        }
-      } catch (error) {
-        console.error("Auth check failed");
-      }
-    }
-
-    checkButtonState();
-
-  }, []);
-
+// ===================================================== APIs ends ======================================================
 
 if (loading) return null;
 
-    return (
+return (
         <>
         <nav className="w-full bg-gray-900/80 backdrop-blur-md shadow-lg border-b border-gray-800 fixed top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-3 flex items-center justify-between">
@@ -296,7 +283,7 @@ if (loading) return null;
                 </NavLink>
 
                 <NavLink
-                    to={'/tools'}  // state
+                    to={state}
                     className={({ isActive }) =>
                     `${navBase} ${isActive ? navActive : navInactive}`
                     }
@@ -344,7 +331,6 @@ if (loading) return null;
                     {user ? (
                     <div
                         className="relative"
-                        ref={profileRef}
                         onMouseEnter={() => {
                         if (isDesktop) setProfile(true);
                         }}
@@ -436,7 +422,7 @@ if (loading) return null;
         />
 
         </>
-    )
+)
 }
 
-export default Navbar
+export default React.memo(Navbar);
