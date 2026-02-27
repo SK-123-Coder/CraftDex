@@ -46,7 +46,7 @@ const Popup = ({ isOpen, title, message, btn, state, onClose }) => {
           <button
             onClick={() => {
               onClose();
-              navigate(state);
+              window.location.href = state;
             }}
             className="
               px-6 py-2.5 rounded-lg
