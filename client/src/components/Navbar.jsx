@@ -334,14 +334,14 @@ return (
 
                     {/* Hamburger Button */}
                     <button
-                    className="lg:hidden text-2xl"
-                    onClick={() => setMenu(prev => !prev)}
+                      className="lg:hidden text-2xl relative w-8 h-8 flex items-center justify-center"
+                      onClick={() => setMenu(prev => !prev)}
                     >
-                    {Menu ? (
-                        <i className="fa-solid fa-xmark text-xl text-gray-300"></i>
-                    ) : (
-                        <i className="fa-solid fa-bars text-xl text-gray-300"></i>
-                    )}
+                      <i
+                        className={`fa-solid ${
+                          Menu ? "fa-xmark rotate-180 opacity-100" : "fa-bars rotate-0 opacity-100"
+                        } text-xl text-gray-300 transition-all duration-300 ease-in-out`}
+                      ></i>
                     </button>
                 </div>
             </div>

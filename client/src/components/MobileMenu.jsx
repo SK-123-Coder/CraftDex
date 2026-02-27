@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
 import React from "react";
+import { useContext } from "react";
+import { FetchedUserDataContext } from "../context/FetchedUserData";  // Context for user data
 
 
 function MobileMenu({
@@ -13,69 +14,38 @@ function MobileMenu({
   setError,
 }) {
 
-const API = import.meta.env.VITE_API_URL;
-
 const linkBase = "flex items-center gap-3 px-6 py-3 border-b border-gray-800 transition-all duration-300 ease-out";
 
 const linkInactive = "text-gray-300 hover:bg-gray-800/70 hover:text-[#5FBFF9] hover:pl-8";
 
 const linkActive = "bg-gray-800 text-[#5FBFF9] pl-8 font-semibold shadow-inner";
 
-
-
-const [user, setUser] = useState(null);  // Track user state
-const [loading, setLoading] = useState(true);  // Track loading state for auth check
-
-// ================================================== APIs =========================================================
-
-useEffect(() => {  // Fetch user data on component mount to determine if authenticated
-  const fetchUser = async () => {
-    try {
-      const res = await fetch(`${API}/api/auth/user`, {
-        method: "GET",
-        credentials: "include",
-      });
-
-      if (!res.ok) {
-        setUser(null);
-        return;
-      }
-
-      const data = await res.json();
-      setUser(data);
-
-    } catch {
-
-      setUser(null);
-
-    } finally {
-
-      setLoading(false);
-      
-    }
-  };
-
-  fetchUser();
-}, []);
-
-// ================================================== APIs end =========================================================
-
-  // SAFE early returns
-  if (!Menu || loading) return null;
+const { user } = useContext(FetchedUserDataContext);  // Get user data from context
 
   return (
     <>
       {/* Overlay */}
       <div
-        className="fixed inset-0 z-20 bg-black/40 backdrop-blur-sm"
+        className={`
+          fixed inset-0 z-20 bg-black/40 backdrop-blur-sm
+          transition-opacity duration-300 ease-in-out
+          ${Menu ? "opacity-100" : "opacity-0 pointer-events-none"}
+        `}
         onClick={() => setMenu(false)}
       />
 
       <div
-        className="fixed top-16 inset-x-0 z-30 flex flex-col
-                   bg-gray-900/90 backdrop-blur-xl
-                   border-t border-gray-800
-                   animate-slideDown"
+        className={`
+          fixed top-16 inset-x-0 z-30 flex flex-col
+          bg-gray-900/90 backdrop-blur-xl
+          border-t border-gray-800
+
+          transform transition-all duration-300 ease-in-out
+
+          ${Menu
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 -translate-y-6 pointer-events-none"}
+        `}
         onClick={(e) => e.stopPropagation()}
       >
         {/* =====================
