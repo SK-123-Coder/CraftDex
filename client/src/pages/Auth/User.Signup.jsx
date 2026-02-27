@@ -14,6 +14,7 @@ const API = import.meta.env.VITE_API_URL;
   
 const [open, setOpen] = useState(false); // For Popup window
 const [activePopup, setActivePopup] = useState(null); // Activation of popup windows
+const [loading, setLoading] = useState(false);  // For loading state of button
 
 const inputStyle = "w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 placeholder-gray-500 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 outline-none transition";
 
@@ -31,6 +32,7 @@ const handleChange = (e) => {  // For form data
 };
 
 const handleSubmit = async (e) => {  // For form data
+  setLoading(true);
   e.preventDefault();
 
   try {
@@ -45,21 +47,22 @@ const handleSubmit = async (e) => {  // For form data
 
     if (response.status === 201) {  // If user created successfully
       // When successfull
-
+      setLoading(false);
       const popup = signupPopup.find(p => p.id === 1);
       setActivePopup(popup);
       setOpen(true);
+      
 
     } else if (response.status === 409) {  // When user already exist
       // If already exist
-
+      setLoading(false);
       const popup = signupPopup.find(p => p.id === 2);
       setActivePopup(popup);
       setOpen(true);
 
     } else if (response.status === 400){  // When user send empty feild
       // When empty feild
-
+      setLoading(false);
       const popup = signupPopup.find(p => p.id === 3);
       setActivePopup(popup);
       setOpen(true);
@@ -136,7 +139,7 @@ const handleSubmit = async (e) => {  // For form data
               type="submit"
               className="w-full py-2.5 rounded-lg bg-blue-500 hover:bg-blue-600 transition duration-300 font-semibold text-white shadow-lg shadow-blue-500/30"
             >
-              Sign Up
+              {loading ? "Loading..." : "Sign Up"}
             </button>
           </form>
 

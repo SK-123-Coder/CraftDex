@@ -82,6 +82,7 @@ function Footer(){
                 btn: "OK",
                 state: "#"
             })
+            setEmail("");
 
         }
         } catch (error) {
@@ -93,6 +94,7 @@ function Footer(){
                 btn: "OK",
                 state: "#"
             })
+            setEmail("");
 
         } finally {
 

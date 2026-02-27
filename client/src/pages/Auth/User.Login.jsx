@@ -14,6 +14,7 @@ const API = import.meta.env.VITE_API_URL;
   
 const [open, setOpen] = useState(false);  // For popup window
 const [activePopup, setActivePopup] = useState(null);  // For activation of popup window
+const [loading, setLoading] = useState(false);  // For loading state of button
 
 const [formData, setFormData] = useState({  // For form data
   email:"",
@@ -28,6 +29,7 @@ const handleChange = (e) => {  // Handle form data change
 };
 
 const handleSubmit = async (e) => {  // Handle form submission
+  setLoading(true);
   e.preventDefault();
 
   try{
@@ -42,28 +44,28 @@ const handleSubmit = async (e) => {  // Handle form submission
 
     if (response.status === 200) {  // If login successful
       // When successful
-
+      setLoading(false);
       const popup = loginPopup.find(p => p.id === 1);
       setActivePopup(popup);
       setOpen(true);
 
     } else if (response.status === 400){  // If data empty
       // When empty feild
-
+      setLoading(false);
       const popup = loginPopup.find(p => p.id === 3);
       setActivePopup(popup);
       setOpen(true);
 
     } else if (response.status === 404){  // If user not found
       // If data not found
-
+      setLoading(false);
       const popup = loginPopup.find(p => p.id === 2);
       setActivePopup(popup);
       setOpen(true);
 
     } else if (response.status === 401){  // If password incorrect
       // If data incorrect
-
+      setLoading(false);
       const popup = loginPopup.find(p => p.id === 4);
       setActivePopup(popup);
       setOpen(true);
@@ -110,7 +112,7 @@ const handleSubmit = async (e) => {  // Handle form submission
 
                         <button type="submit"
                         className="w-full py-2 rounded-lg bg-blue-500 hover:bg-blue-600 transition duration-300 font-semibold text-white shadow-lg shadow-blue-500/30">
-                            Login
+                            {loading ? "Loading..." : "Login"}
                         </button>
 
                         <p className="text-center text-sm text-gray-400 mt-3">

@@ -14,6 +14,7 @@ const API = import.meta.env.VITE_API_URL;
   
 const [open, setOpen] = useState(false); // For popup window
 const [activePopup, setActivePopup] = useState(null); // Activation of popup window
+const [loading, setLoading] = useState(false);  // For loading state of button
 
 const [formData, setFormData] = useState({  // Form data for account recovery
   name:"",
@@ -28,6 +29,7 @@ const handleChange = (e) => {  // Handle change of form data
 };
 
 const handleSubmit = async (e) => {  // Handle submit form data to backend
+  setLoading(true);
   e.preventDefault();
 
   try{
@@ -41,21 +43,21 @@ const handleSubmit = async (e) => {  // Handle submit form data to backend
 
     if(response.status === 200){  // If data exist and successfully sent email
       // When successfull
-
+      setLoading(false);
       const popup = AccountRecoverPopup.find(p => p.id === 1);
       setActivePopup(popup);
       setOpen(true);
 
     } else if(response.status === 400){  // If empty feild
       // When empty feild
-
+      setLoading(false);
       const popup = AccountRecoverPopup.find(p => p.id === 2);
       setActivePopup(popup);
       setOpen(true);
 
     } else if(response.status === 404){  // If data not exist
       // If data not exist
-
+      setLoading(false);
       const popup = AccountRecoverPopup.find(p => p.id === 3);
       setActivePopup(popup);
       setOpen(true);
@@ -123,7 +125,7 @@ const handleSubmit = async (e) => {  // Handle submit form data to backend
                                 shadow-blue-600/40 hover:shadow-blue-500/60 hover:scale-[1.02]">
 
                         <i className="fa-solid fa-rotate-right text-white"></i>
-                        <span>Recover Account</span>
+                        <span>{loading ? "Loading..." : "Recover Account"}</span>
                     </button>
 
                     <p className="text-center text-sm text-gray-300 mt-2">
