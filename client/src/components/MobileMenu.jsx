@@ -25,32 +25,8 @@ const linkActive = "bg-gray-800 text-[#5FBFF9] pl-8 font-semibold shadow-inner";
 
 const [user, setUser] = useState(null);  // Track user state
 const [loading, setLoading] = useState(true);  // Track loading state for auth check
-const [ state, setState ] = useState('/signup');  // Default to signup, will update to /tools if user is authenticated
 
 // ================================================== APIs =========================================================
-
-useEffect(() => {  // Check if user is authenticated to determine if "Tools" link should be shown
-  const checkButtonState = async () => {
-    try {
-      const res = await fetch(`${API}/api/user/userVerify`, {
-        method: "GET",
-        credentials: "include"
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        if (data) {
-          setState('/tools');
-        }
-      }
-    } catch (error) {
-      console.error("Auth check failed");
-    }
-  }
-
-  checkButtonState();
-
-}, []);
 
 useEffect(() => {  // Fetch user data on component mount to determine if authenticated
   const fetchUser = async () => {
@@ -170,7 +146,7 @@ useEffect(() => {  // Fetch user data on component mount to determine if authent
           Home
         </NavLink>
 
-        <NavLink to={state} onClick={() => setMenu(false)}
+        <NavLink to="/tools" onClick={() => setMenu(false)}
           className={({ isActive }) =>
             `${linkBase} ${isActive ? linkActive : linkInactive}`
           }>

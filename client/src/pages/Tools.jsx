@@ -1,5 +1,6 @@
 // dependency
 import React from 'react'
+import { motion } from "framer-motion";
 
 // Components
 import Navbar from '../components/Navbar'
@@ -15,7 +16,12 @@ import ToolsCard from '../components/ToolsCard'
 
 function Tools(){
     return(
-        <>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="bg-gray-900"   // or same as page background
+        >
             <Navbar />
             
             {/* Product and Tools section */}
@@ -92,7 +98,7 @@ function Tools(){
             </section>
 
             <Footer />
-        </>
+        </motion.div>
     )
 }
 

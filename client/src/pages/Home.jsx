@@ -70,7 +70,12 @@ useEffect(() => {  // This useEffect hook performs a similar authentication chec
 }, []);
   
     return(
-        <>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="bg-gray-900"   // or same as page background
+        >
             <Navbar />
 
             {/* Hero Section */}
@@ -253,7 +258,7 @@ useEffect(() => {  // This useEffect hook performs a similar authentication chec
             </section>
 
             <Footer />
-        </>
+        </motion.div>
     )
 }
 

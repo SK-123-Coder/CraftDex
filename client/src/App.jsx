@@ -17,48 +17,59 @@ import Login from './pages/Auth/User.Login'
 import AccountRecover from './pages/Auth/User.Acountrecover'
 import AdminPage from './pages/Auth/AdminPage'
 
+
+import { FetchedUserDataProvider } from './context/FetchedUserData'  // Context Provider for user data
+import { FetchedNotificationProvider } from './context/FetchedNotification'  // Context Provider for notifications
+
 // Tools Pages
 import ImageToPdf from './pages/Tools_Pages/ImageToPdf'
 
 function App() {
+  console.log("App component rendered");
   return (
-    <div>
-    <BrowserRouter>
-      {/* Handel scroll */}
-      <ScrollToTop />
-        <Routes>
-          {/* Home Page */}
-          <Route path="/" element={<Home className="fade-box"/>} />
+    <div className="bg-gradient-to-b from-gray-900 to-gray-950">
 
-          {/* Home Page */}
-          <Route path="/tools" element={<Tools className="fade-box"/>} />
+      <FetchedNotificationProvider>
+        <FetchedUserDataProvider>
+          <BrowserRouter>
+            {/* Handel scroll */}
+            <ScrollToTop />
+              <Routes>
+                {/* Home Page */}
+                <Route path="/" element={<Home className="fade-box"/>} />
 
-          {/* Home Page */}
-          <Route path="/docs" element={<Docs className="animate-fadeIn"/>} />
+                {/* Home Page */}
+                <Route path="/tools" element={<Tools className="fade-box"/>} />
 
-          {/* Docs Content PAge */}
-          <Route path="/docscontent/:category/:id" element={<DocsContent />} />
+                {/* Home Page */}
+                <Route path="/docs" element={<Docs className="animate-fadeIn"/>} />
 
-          {/* --------------------------------------- Auth Pages -------------------------------------------------- */}
+                {/* Docs Content PAge */}
+                <Route path="/docscontent/:category/:id" element={<DocsContent />} />
 
-          {/* Signup Page */}
-          <Route path="/signup" element={<Signup />} />
+                {/* --------------------------------------- Auth Pages -------------------------------------------------- */}
 
-          {/* Login Page */}
-          <Route path="/login" element={<Login />} />
+                {/* Signup Page */}
+                <Route path="/signup" element={<Signup />} />
 
-          {/* Account recovery page */}
-          <Route path="/accountRecover" element={<AccountRecover />} />
+                {/* Login Page */}
+                <Route path="/login" element={<Login />} />
 
-          {/* Admin Page */}
-          <Route path="/admin" element={<AdminPage />} />
+                {/* Account recovery page */}
+                <Route path="/accountRecover" element={<AccountRecover />} />
 
-          {/* --------------------------------------- Tools Pages -------------------------------------------------- */}
+                {/* Admin Page */}
+                <Route path="/admin" element={<AdminPage />} />
 
-          {/* Image to PDF converter Page */}
-          <Route path="/imageToPdf" element={<ImageToPdf />} />
-        </Routes>
-    </BrowserRouter>
+                {/* --------------------------------------- Tools Pages -------------------------------------------------- */}
+
+                {/* Image to PDF converter Page */}
+                <Route path="/imageToPdf" element={<ImageToPdf />} />
+              </Routes>
+          </BrowserRouter>
+        </FetchedUserDataProvider>
+      </FetchedNotificationProvider>
+
     </div>
   )
 }

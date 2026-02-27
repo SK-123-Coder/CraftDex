@@ -1,6 +1,7 @@
 // Dependencies
 import { Link } from "react-router-dom";
 import React from "react";
+import { motion } from "framer-motion";
 
 // Components
 import Footer from "../components/Footer"
@@ -12,7 +13,12 @@ import ListsTools from '../data/For_DocumentationPage/Lists_Of_Tools&Products/To
 
 function Docs(){
     return(
-        <>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="bg-gray-900"   // or same as page background
+        >
             <Navbar />
 
             {/* Docs Hero Section */}
@@ -135,7 +141,7 @@ function Docs(){
             </section>
 
             <Footer />
-        </>
+        </motion.div>
     )
 }
 

@@ -1,37 +1,11 @@
 // Dependencies
-import { useEffect, useState } from "react";
 import React from "react";
+import { useContext } from "react";
+import { FetchedNotificationContext } from "../context/FetchedNotification";
 
 const UpdatesPanel = ({ isOpen, onClose }) => {
-const API = import.meta.env.VITE_API_URL;
-  
-const [notifications, setNotifications] = useState([]);  // State to hold notifications
-const [loading, setLoading] = useState(true);  // State to track loading status
 
-useEffect(() => {  // Fetch notifications from the server
-  const fetchNotifications = async () => {
-    try {
-      const res = await fetch(`${API}/api/auth/getNotification`);
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Failed to fetch");
-      }
-
-      setNotifications(data.data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchNotifications();
-}, []);
-
-if (loading) {
-  return <p className="text-gray-400 text-center">Loading notifications...</p>;
-}
+  const { notifications } = useContext(FetchedNotificationContext);  // Get notifications from context
 
   return (
     <>

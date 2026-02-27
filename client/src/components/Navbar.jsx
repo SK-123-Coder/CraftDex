@@ -9,8 +9,15 @@ import { useNavigate } from "react-router-dom";
 import UpdatesPanel from "./UpdatesPanel";
 import MobileMenu from "./MobileMenu"
 
+import { useContext } from "react";
+import { FetchedUserDataContext } from "../context/FetchedUserData";  // Context for user data
+
 function Navbar(){
 const API = import.meta.env.VITE_API_URL;
+
+const { user } = useContext(FetchedUserDataContext);  // Get user data from context
+
+console.log("Navbar rendered");
 
 // Tailwind class constants
 const navBase = "relative group transition duration-300";
@@ -71,47 +78,6 @@ const [profile, setProfile] = useState(false);  // Profile dropdown visibility o
 
 
 // ===================================================== APIs ======================================================
-
-const [user, setUser] = useState(null);  // null = unknown, object = logged in, false = explicitly not logged in
-const [loading, setLoading] = useState(true);  // Loading state to prevent UI flash on auth check
-useEffect(() => {  // Check if user is logged in on mount
-  let isMounted = true;
-
-  const fetchUser = async () => {
-    try {
-      const res = await fetch(`${API}/api/auth/user`, {
-        method: "GET",
-        credentials: "include",
-      });
-
-      // User not logged in (expected case)
-      if (res.status === 401) {
-        if (isMounted) setUser(null);
-        return;
-      }
-
-      // Other errors (real problems)
-      if (!res.ok) {
-        throw new Error(`Auth error: ${res.status}`);
-      }
-
-      const data = await res.json();
-      if (isMounted) setUser(data);
-
-    } catch (err) {
-      console.error("Auth fetch failed:", err);
-      if (isMounted) setUser(null);
-      } finally {
-       if (isMounted) setLoading(false);
-      }
-  };
-
-  fetchUser();
-
-  return () => {
-    isMounted = false;
-  };
-}, []);
 
 
 const handleDoubleClick = async () => {  // Admin auth on logo double-click
@@ -174,8 +140,6 @@ const handleSearch = async () => {  // Search API call
 };
 
 // ===================================================== APIs ends ======================================================
-
-if (loading) return null;
 
 return (
         <>
