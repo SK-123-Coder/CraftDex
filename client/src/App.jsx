@@ -25,7 +25,6 @@ import { FetchedNotificationProvider } from './context/FetchedNotification'  // 
 import ImageToPdf from './pages/Tools_Pages/ImageToPdf'
 
 function App() {
-  console.log("App component rendered");
   return (
     <div className="bg-gradient-to-b from-gray-900 to-gray-950">
 

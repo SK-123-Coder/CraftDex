@@ -17,8 +17,6 @@ const API = import.meta.env.VITE_API_URL;
 
 const { user } = useContext(FetchedUserDataContext);  // Get user data from context
 
-console.log("Navbar rendered");
-
 // Tailwind class constants
 const navBase = "relative group transition duration-300";
 const navInactive = "text-gray-300 hover:text-[#5FBFF9]";
