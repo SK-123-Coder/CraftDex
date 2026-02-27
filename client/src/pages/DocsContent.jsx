@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import React from "react";
+import { motion } from "framer-motion";
 
 // Import of ui components
 import Footer from "../components/Footer"
@@ -35,7 +36,12 @@ function DocsContent() {
   }
 
   return (
-    <>
+    <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="bg-gray-900"   // or same as page background
+    >
       <Navbar />
 
       {/* Documentation Rendering Section */}
@@ -44,7 +50,7 @@ function DocsContent() {
         {/* Subtle background glow */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(95,191,249,0.08),transparent_60%)] pointer-events-none" />
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
 
           {/* Header */}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6 mb-10 sm:mb-14 lg:mb-20">
@@ -55,7 +61,7 @@ function DocsContent() {
                 inline-flex items-center gap-2
                 w-fit px-3 py-1.5 sm:px-4 sm:py-2
                 rounded-xl bg-gray-800/70
-                text-xs sm:text-sm text-gray-300
+                text-xs sm:text-sm font-semibold text-gray-300
                 hover:text-white hover:bg-gray-700/70
                 transition
               "
@@ -156,7 +162,7 @@ function DocsContent() {
       </section>
 
       <Footer />
-    </>
+    </motion.div>
   );
 }
 
