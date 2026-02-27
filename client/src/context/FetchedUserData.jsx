@@ -42,7 +42,7 @@ export const FetchedUserDataProvider = ({ children }) => {
 
   return (
     <FetchedUserDataContext.Provider value={{ user, setUser }}>
-      {children}  // Render children only after loading is complete
+      {children}
     </FetchedUserDataContext.Provider>
   );
 };

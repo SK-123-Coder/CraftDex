@@ -133,7 +133,7 @@ function Footer(){
                         <ul className="space-y-3">
                         <li className="flex items-center gap-3 group">
                             <i className="fa-solid fa-envelope text-blue-400 group-hover:scale-110 transition"></i>
-                            <a href="sarangkhandateofficial.com" className="hover:text-blue-400 transition">sarangkhandateofficial@gmail.com</a>
+                            <a className="hover:text-blue-400 transition">sarangkhandateofficial@gmail.com</a>
                         </li>
                         <li className="flex items-center gap-3 group">
                             <i className="fa-solid fa-phone text-blue-400 group-hover:scale-110 transition"></i>
