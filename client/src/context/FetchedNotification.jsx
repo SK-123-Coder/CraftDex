@@ -31,7 +31,7 @@ export const FetchedNotificationProvider = ({ children }) => {
     }, []);
 
     if (loading) {
-    return <p className="text-gray-400 text-center">Loading notifications...</p>;
+    return null;
     }
 
     return(
