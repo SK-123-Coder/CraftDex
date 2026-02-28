@@ -1,21 +1,34 @@
 // Dependencies
 import { Link } from "react-router-dom";
+<<<<<<< HEAD
 import { useContext, useEffect } from "react";
+=======
+import { useEffect } from "react";
+>>>>>>> b3a2747a207556515983ac7508697243152a709a
 import { useNavigate } from "react-router-dom";
 import React from 'react';
 import { motion } from "framer-motion";
+import { useContext } from "react";
 
 // Components
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
+<<<<<<< HEAD
 import {ButtonStateOnUserStateContext} from '../context/ButtonStateOnUserState'
+=======
+import { ButtonStateOnUsersContext } from "../context/ButtonStateOnUsers";  // Import context for button state
+>>>>>>> b3a2747a207556515983ac7508697243152a709a
 
 function Home(){
 const API = import.meta.env.VITE_API_URL;
 
+<<<<<<< HEAD
 const { state } = useContext(ButtonStateOnUserStateContext);
 
+=======
+const { state } = useContext(ButtonStateOnUsersContext);  // Access the button state from context
+>>>>>>> b3a2747a207556515983ac7508697243152a709a
 
 // ==================================================== APIs =====================================================
 
@@ -54,7 +67,10 @@ useEffect(() => {  // This useEffect hook is responsible for checking the user's
 
 }, [navigate]);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b3a2747a207556515983ac7508697243152a709a
 // ==================================================== APIs ends =====================================================
   
     return(
