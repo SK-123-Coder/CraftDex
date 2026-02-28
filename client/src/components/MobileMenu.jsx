@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import React from "react";
 import { useContext } from "react";
 import { FetchedUserDataContext } from "../context/FetchedUserData";  // Context for user data
+import {ButtonStateOnUserStateContext} from '../context/ButtonStateOnUserState'
 
 
 function MobileMenu({
@@ -21,6 +22,7 @@ const linkInactive = "text-gray-300 hover:bg-gray-800/70 hover:text-[#5FBFF9] ho
 const linkActive = "bg-gray-800 text-[#5FBFF9] pl-8 font-semibold shadow-inner";
 
 const { user } = useContext(FetchedUserDataContext);  // Get user data from context
+const { state } = useContext(ButtonStateOnUserStateContext);  // Get button state
 
   return (
     <>
@@ -116,7 +118,7 @@ const { user } = useContext(FetchedUserDataContext);  // Get user data from cont
           Home
         </NavLink>
 
-        <NavLink to="/tools" onClick={() => setMenu(false)}
+        <NavLink to={state} onClick={() => setMenu(false)}
           className={({ isActive }) =>
             `${linkBase} ${isActive ? linkActive : linkInactive}`
           }>

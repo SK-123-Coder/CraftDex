@@ -20,6 +20,7 @@ import AdminPage from './pages/Auth/AdminPage'
 
 import { FetchedUserDataProvider } from './context/FetchedUserData'  // Context Provider for user data
 import { FetchedNotificationProvider } from './context/FetchedNotification'  // Context Provider for notifications
+import { ButtonStateOnUserStateProvider } from './context/ButtonStateOnUserState'  // Context Provider for button state
 
 // Tools Pages
 import ImageToPdf from './pages/Tools_Pages/ImageToPdf'
@@ -28,6 +29,7 @@ function App() {
   return (
     <div className="bg-gradient-to-b from-gray-900 to-gray-950">
 
+    <ButtonStateOnUserStateProvider>
       <FetchedNotificationProvider>
         <FetchedUserDataProvider>
           <BrowserRouter>
@@ -68,6 +70,7 @@ function App() {
           </BrowserRouter>
         </FetchedUserDataProvider>
       </FetchedNotificationProvider>
+    </ButtonStateOnUserStateProvider>
 
     </div>
   )
