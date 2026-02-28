@@ -11,11 +11,13 @@ import MobileMenu from "./MobileMenu"
 
 import { useContext } from "react";
 import { FetchedUserDataContext } from "../context/FetchedUserData";  // Context for user data
+import { ButtonStateOnUsersContext } from "../context/ButtonStateOnUsers";  // Context for button state
 
 function Navbar(){
 const API = import.meta.env.VITE_API_URL;
 
 const { user } = useContext(FetchedUserDataContext);  // Get user data from context
+const { state } = useContext(ButtonStateOnUsersContext);  // Get button state from context
 
 // Tailwind class constants
 const navBase = "relative group transition duration-300";
@@ -219,7 +221,7 @@ return (
                 </NavLink>
 
                 <NavLink
-                    to={'/tools'}
+                    to={state}
                     className={({ isActive }) =>
                     `${navBase} ${isActive ? navActive : navInactive}`
                     }
