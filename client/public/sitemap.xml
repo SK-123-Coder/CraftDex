@@ -11,7 +11,7 @@
 
   <!-- Tools Page -->
   <url>
-    <loc>https://craftdex.in/Tools</loc>
+    <loc>https://craftdex.in/tools</loc>
     <lastmod>2026-02-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -19,7 +19,7 @@
 
   <!-- Direct Image To PDF Page -->
   <url>
-    <loc>https://craftdex.in/imageToPdf</loc>
+    <loc>https://craftdex.in/imagetopdf</loc>
     <lastmod>2026-02-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
