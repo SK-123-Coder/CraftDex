@@ -6,7 +6,7 @@ const loginPopup = [
     title: "Login Successful",
     message: "Welcome back to CraftDex. You’re all set to continue.",
     btn: "OK",
-    state: "/",
+    state: "/tools",
   },
   {
     id: 2,

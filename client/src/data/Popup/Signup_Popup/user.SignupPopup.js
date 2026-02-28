@@ -6,7 +6,7 @@ const signupPopup = [
     title: "Account Created Successfully",
     message: "Welcome to CraftDex! Your account has been created and you’re ready to get started.",
     btn: "OK",
-    state: "/",
+    state: "/tools",
   },
   {
     id: 2,

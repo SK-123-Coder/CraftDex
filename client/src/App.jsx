@@ -35,13 +35,13 @@ function App() {
             <ScrollToTop />
               <Routes>
                 {/* Home Page */}
-                <Route path="/" element={<Home className="fade-box"/>} />
+                <Route path="/" element={<Home />} />
 
                 {/* Home Page */}
-                <Route path="/tools" element={<Tools className="fade-box"/>} />
+                <Route path="/tools" element={<Tools />} />
 
                 {/* Home Page */}
-                <Route path="/docs" element={<Docs className="animate-fadeIn"/>} />
+                <Route path="/docs" element={<Docs />} />
 
                 {/* Docs Content PAge */}
                 <Route path="/docscontent/:category/:id" element={<DocsContent />} />

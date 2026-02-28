@@ -12,14 +12,20 @@ import Footer from '../components/Footer'
 function Home(){
 const API = import.meta.env.VITE_API_URL;
 
+
+// ==================================================== APIs =====================================================
+
 const navigate = useNavigate();  // It is used to programmatically navigate to different routes in the application.
 
 useEffect(() => {  // This useEffect hook is responsible for checking the user's authentication status when the Home component mounts. It uses sessionStorage to ensure that the authentication check is performed only once per session, preventing unnecessary API calls on subsequent renders. If the user is authenticated, it navigates them to the "/tools" page; otherwise, it leaves them on the home page where they can choose to sign up or learn more.
+
   const hasChecked = sessionStorage.getItem("auth_checked");
 
-  if (hasChecked) return;
+  if (hasChecked){
+    return;
+  }
 
-  sessionStorage.setItem("auth_checked", "true");
+  sessionStorage.setItem("auth_checked", "false");
 
   const checkUser = async () => {
     try {
@@ -30,8 +36,9 @@ useEffect(() => {  // This useEffect hook is responsible for checking the user's
 
       if (res.ok) {
         const data = await res.json();
+
         if (data) {
-          navigate("/tools", { replace: true });
+            navigate("/tools", { replace: true });
         }
       }
     } catch (error) {
@@ -68,6 +75,8 @@ useEffect(() => {  // This useEffect hook performs a similar authentication chec
   checkButtonState();
 
 }, []);
+
+// ==================================================== APIs ends =====================================================
   
     return(
         <motion.div

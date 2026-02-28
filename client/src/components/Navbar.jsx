@@ -253,12 +253,12 @@ return (
                 </div>
 
                 {/* Right Section */}
-                <div className="flex items-center gap-4 md:gap-9">
+                <div className="flex items-center gap-3 md:gap-9">
 
                     {/* Update button */}
                     <button
                         onClick={() => setOpen(true)}
-                        className="py-2 text-black rounded flex justify-center items-center cursor-pointer"
+                        className="text-black rounded flex justify-center items-center cursor-pointer mr-2 md:mr-0"
                     >
                         <i className="fa-solid fa-bell text-xl text-gray-300 hover:text-[#5FBFF9] transition"></i>
                     </button>
