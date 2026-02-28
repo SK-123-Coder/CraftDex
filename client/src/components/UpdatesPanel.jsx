@@ -56,8 +56,7 @@ const UpdatesPanel = ({ isOpen, onClose }) => {
           <div className="max-w-4xl mx-auto space-y-4">
             {notifications.length === 0 && (
               <div className="text-center py-16 text-gray-400">
-                <p className="text-lg font-medium">No notifications yet</p>
-                <p className="text-sm mt-1">You’re all caught up 🚀</p>
+                <p className="text-lg font-medium">No notifications</p>
               </div>
             )}
 

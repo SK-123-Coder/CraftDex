@@ -114,11 +114,11 @@ useEffect(() => {  // This useEffect hook performs a similar authentication chec
                 
                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start pt-3">
                     <Link to={state} className="w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl text-base sm:text-lg bg-[#5FBFF9] hover:bg-[#4daee6]   font-semibold shadow-lg shadow-[#5FBFF9]/40 text-gray-900 hover:scale-105 transition duration-300 text-center">
-                    🚀 Get Started
+                    Get Started
                     </Link>
 
                     <Link to="/docs" className="w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl text-base sm:text-lg border border-gray-700 hover:border-[#5FBFF9] hover:text-[#5FBFF9] font-medium text-center hover:scale-105 transition duration-300">
-                    📘 Learn More
+                    Learn More
                     </Link>
                 </div>
                 </div>
@@ -260,7 +260,7 @@ useEffect(() => {  // This useEffect hook performs a similar authentication chec
                 <div className="pt-6">
                 <a href="#contact"
                     className="px-6 py-3 rounded-full border border-[#5FBFF9] hover:bg-[#5FBFF9]/10 hover:text-white text-[#5FBFF9] font-medium transition hover:shadow-lg hover:shadow-[#5FBFF9]/30">
-                    📩 Contact Me
+                    Contact Me
                 </a>
                 </div>
             </div>
